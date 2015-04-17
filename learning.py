@@ -1,4 +1,6 @@
-import sys, pygame
+import sys
+
+import pygame
 
 pygame.init()
 
@@ -6,13 +8,13 @@ size = width, height = 640, 680
 speed = [1, 1]
 
 background = pygame.display.set_mode(size)
-snake = pygame.image.load("pypy-logo.png")
+snake = pygame.image.load("media/pypy-logo.png")
 snakerect = snake.get_rect()
 
 snakerect.x = 0
 snakerect.y = 700
 
-drop = pygame.image.load("water-droplet.png")
+drop = pygame.image.load("media/water-droplet.png")
 dropRect = drop.get_rect()
 
 dropRect.x = 400
