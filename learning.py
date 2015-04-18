@@ -4,27 +4,29 @@ import pygame
 
 pygame.init()
 
-size = width, height = 640, 680
+size = width, height = 600, 680
 speed = [1, 1]
 
 background = pygame.display.set_mode(size)
-snake = pygame.image.load("media/pypy-logo.png")
+snake = pygame.image.load("media/Cat.png")
 snakerect = snake.get_rect()
 
 snakerect.x = 0
 snakerect.y = 700
 
-drop = pygame.image.load("media/water-droplet.png")
+drop = pygame.image.load("media/Mouse.png")
 dropRect = drop.get_rect()
 
-dropRect.x = 400
+dropRect.x = 300
 dropRect.y = 0
 
 font = pygame.font.Font(None, 36)
 score = 0
 score_text = font.render(str(score), 1, (10, 10, 10))
 textpos = score_text.get_rect()
-textpos.x = background.get_width()/2;
+textpos.x = background.get_width()/2
+dropTop = 1
+dropLeft = 1
 
 while 1:
         for event in pygame.event.get():
@@ -37,7 +39,11 @@ while 1:
                     score += 1
                     score_text = font.render(str(score), 1, (10, 10, 10))
 
-        dropRect.move_ip(0, 1)
+        dropRect.move_ip(dropLeft, dropTop)
+        if dropRect.bottom > height or dropRect.top < 0:
+            dropTop = -dropTop
+        if dropRect.left < 0 or dropRect.right > width:
+            dropLeft = -dropLeft
         background.fill((255, 125, 255))
         background.blit(score_text, textpos)
         background.blit(snake, snakerect)
