@@ -61,16 +61,16 @@ class CatAndMouseGame:
         Main game loop
         :return:
         """
-        all_caught = False;
+        all_caught = False
         while not all_caught:
             #Handle user input
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
-                elif event.type == pygame.MOUSEMOTION:
-                    self.cat.rect.x = event.pos[0]-10
-                    self.cat.rect.y = event.pos[1]-15
+                elif event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
+                    self.cat.process_movement(event)
 
+            self.cat.rect.move_ip(self.cat.x_move, self.cat.y_move)
             #Detect if any mice have been caught
             caught_mice = pygame.sprite.spritecollide(self.cat, self.mouse_list, False)
             for mouse in caught_mice:
