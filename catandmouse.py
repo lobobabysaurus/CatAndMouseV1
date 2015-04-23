@@ -25,7 +25,7 @@ class CatAndMouseGame:
         self.all_animals.add(self.cat)
 
         #Create the antagonists
-        self.mouse_list = self.__create_mouse_pool()
+        self.mouse_list = self._create_mouse_pool()
         self.dead_mouse_list = pygame.sprite.Group()
 
         #Set the score display
@@ -42,7 +42,7 @@ class CatAndMouseGame:
         self.time_pos.x = self.width/2
         self.time_pos.y = self.height - self.time_pos.height
 
-    def __create_mouse_pool(self):
+    def _create_mouse_pool(self):
         """
 
         :return:
@@ -70,7 +70,6 @@ class CatAndMouseGame:
                 elif event.type == pygame.KEYUP or event.type == pygame.KEYDOWN:
                     self.cat.process_movement(event)
 
-            self.cat.rect.move_ip(self.cat.x_move, self.cat.y_move)
             #Detect if any mice have been caught
             caught_mice = pygame.sprite.spritecollide(self.cat, self.mouse_list, False)
             for mouse in caught_mice:
@@ -83,13 +82,11 @@ class CatAndMouseGame:
             #If any mice are left update the time and move the still alive guys otherwise end the game
             if len(self.mouse_list) > 0:
                 self.time_text = self.font.render(str(time.time()-self.start)[:4], 1, (10, 10, 10))
-                for mouse in self.mouse_list:
-                    mouse.move()
-            # else:
-            #    all_caught = True
 
             #Draw all of the required data
             self.background.fill((0, 125, 0))
+            self.mouse_list.update()
+            self.cat.move()
             self.all_animals.draw(self.background)
             self.background.blit(self.score_text, self.textpos)
             self.background.blit(self.time_text, self.time_pos)
