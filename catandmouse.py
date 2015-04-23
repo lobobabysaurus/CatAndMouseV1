@@ -19,7 +19,7 @@ class CatAndMouseGame:
         self.all_animals = pygame.sprite.Group()
 
         #Create the protagonist
-        self.cat = animals.Cat()
+        self.cat = animals.Cat(self.background)
         self.cat.rect.x = random.randrange(self.width)
         self.cat.rect.y = random.randrange(self.height)
         self.all_animals.add(self.cat)
@@ -85,9 +85,9 @@ class CatAndMouseGame:
 
             #Draw all of the required data
             self.background.fill((0, 125, 0))
-            self.mouse_list.update()
-            self.cat.move()
+            self.all_animals.update()
             self.all_animals.draw(self.background)
+            self.background.blit(self.cat.image,self.cat.rect)
             self.background.blit(self.score_text, self.textpos)
             self.background.blit(self.time_text, self.time_pos)
             pygame.display.flip()
