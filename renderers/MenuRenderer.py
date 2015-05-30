@@ -20,12 +20,17 @@ class MenuRenderer(TextRenderer):
         :param option_list A list of text for options that should be created
         :return A dictionary mapping every option surface to its relevant rectangle
         """
+        half = len(option_list)/2
         options = {}
         for index, option in enumerate(option_list):
             option_text = self.font.render(option, 1, self.text_color)
             option_rect = option_text.get_rect()
             option_rect.x = self.width/2 - option_rect.width/2
             option_rect.y = self.height/2 - option_rect.height/2
+            if index < half:
+                option_rect.y -= (self.font_size * (half-index))
+            else:
+                option_rect.y += (self.font_size * (index-half))
             options[option_text] = option_rect
         return options
 

@@ -24,7 +24,7 @@ class CatAndMouseGame:
         display.set_caption("Cat and Mouse")
 
         self.clock = time.Clock()
-        menu_options = ["Start", "Options", ]
+        menu_options = ["Start", "Instructions", "Options", "Quit", ]
         self.menu = MenuRenderer(self.background, menu_options)
         self.score_and_time = PlayTextRenderer(self.background, self.mouse_number)
         self.animals = AnimalRenderer(self.background, self.mouse_number)
