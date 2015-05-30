@@ -1,9 +1,9 @@
 import time
 
-from pygame.font import Font
+from renderers.TextRenderer import TextRenderer
 
 
-class PlayTextRenderer:
+class PlayTextRenderer(TextRenderer):
     """
     Renders and updates relevant text for playing the game
     """
@@ -13,12 +13,9 @@ class PlayTextRenderer:
         :param screen: Surface which the game is played on
         :param num_of_mice: The number of mice involved in the game
         """
-        self.text_color = (10, 10, 10)
-        self.width, self.height = screen.get_size()
-        self.background = screen
+        super().__init__(screen)
         self.total_mice = num_of_mice
         # Set the score display
-        self.font = Font(None, 36)
         self.score = 0
         self.score_text = self.font.render(str(self.score), 1, self.text_color)
         self.score_pos = self.score_text.get_rect()

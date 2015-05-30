@@ -4,9 +4,10 @@ from pygame import sprite
 
 from animals.Cat import Cat
 from animals.Mouse import Mouse
+from renderers.Renderer import Renderer
 
 
-class AnimalRenderer:
+class AnimalRenderer(Renderer):
     """
     Renders and updates animal data uses in the game
     """
@@ -16,9 +17,9 @@ class AnimalRenderer:
         :param screen: Surface which the game is played on
         :param number_of_mice: The number of mice involved in the game
         """
-        self.background = screen
-        self.all_animals = sprite.Group()
+        super().__init__(screen)
 
+        self.all_animals = sprite.Group()
         # Create the protagonist
         self.cat = Cat(self.background, 3)
         self.all_animals.add(self.cat)
