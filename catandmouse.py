@@ -42,11 +42,17 @@ class CatAndMouseGame:
             for user_input in event.get():
                 if user_input.type == pygame.QUIT:
                     sys.exit()
-                elif user_input.type == pygame.MOUSEBUTTONDOWN and user_input.button == 1:
-                        pos = pygame.mouse.get_pos()
-                        for option in self.menu.menu_options:
-                            if self.menu.menu_options[option].collidepoint(pos):
+                elif user_input.type == pygame.KEYDOWN:
+                    if user_input.type == pygame.KEYDOWN:
+                        if user_input.key == pygame.K_UP:
+                            self.menu.move_up()
+                        elif user_input.key == pygame.K_DOWN:
+                            self.menu.move_down()
+                        elif user_input.key == pygame.K_RETURN:
+                            if self.menu.active_index == 0:
                                 started = True
+                            elif self.menu.active_index == 3:
+                                sys.exit()
             self.render_and_draw(render_list)
 
     def reset_game(self):
