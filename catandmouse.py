@@ -24,15 +24,19 @@ class CatAndMouseGame:
         display.set_caption("Cat and Mouse")
 
         self.clock = time.Clock()
-        self.menu = MenuRenderer(self.background, ("Start", "Options", ))
+        menu_options = ["Start", "Options", ]
+        self.menu = MenuRenderer(self.background, menu_options)
         self.score_and_time = PlayTextRenderer(self.background, self.mouse_number)
         self.animals = AnimalRenderer(self.background, self.mouse_number)
 
-    def present_menu(self):
+    def present_menu(self, rerun=False):
         """
         Show a menu to the user
         """
         started = False
+        render_list = [self.animals.render, self.menu.render]
+        if rerun:
+            render_list.append(self.score_and_time.render)
         while not started:
             # Handle user input
             for user_input in event.get():
@@ -43,13 +47,21 @@ class CatAndMouseGame:
                         for option in self.menu.menu_options:
                             if self.menu.menu_options[option].collidepoint(pos):
                                 started = True
-            self.render_and_draw((self.animals.render, self.menu.render))
+            self.render_and_draw(render_list)
+
+    def reset_game(self):
+        """
+        Reset the game play screen
+        """
+        self.animals = AnimalRenderer(self.background, self.mouse_number)
+        self.score_and_time = PlayTextRenderer(self.background, self.mouse_number)
 
     def play_game(self):
         """
         Main game loop
         """
         all_caught = False
+        render_list = [self.animals.render, self.score_and_time.render]
         while not all_caught:
             # Handle user input
             for user_input in event.get():
@@ -57,8 +69,9 @@ class CatAndMouseGame:
                     sys.exit()
                 elif user_input.type == pygame.KEYUP or user_input.type == pygame.KEYDOWN:
                     self.animals.cat.process_movement(user_input)
-            self.animals.detect_deaths(self.score_and_time)
-            self.render_and_draw((self.animals.render, self.score_and_time.render))
+            if self.animals.detect_deaths(self.score_and_time) == 0:
+                all_caught = True
+            self.render_and_draw(render_list)
 
     def render_and_draw(self, render_array):
         """
@@ -72,5 +85,9 @@ class CatAndMouseGame:
         self.clock.tick(60)
 
 cmg = CatAndMouseGame()
-cmg.present_menu()
-cmg.play_game()
+first_run = True
+while True:
+    cmg.present_menu(not first_run)
+    cmg.reset_game()
+    cmg.play_game()
+    first_run = False

@@ -24,7 +24,9 @@ class AnimalRenderer(Renderer):
         self.cat = Cat(self.background, 3)
         self.all_animals.add(self.cat)
 
-        self.mouse_list = self._create_mouse_pool(number_of_mice)
+        self.total_mice = number_of_mice
+
+        self.mouse_list = self._create_mouse_pool(self.total_mice)
         self.dead_mouse_list = sprite.Group()
 
     def _create_mouse_pool(self, number_of_mice):
@@ -43,6 +45,7 @@ class AnimalRenderer(Renderer):
     def detect_deaths(self, score_and_time):
         """
         Find out if any mice have been killed, let them die, remove them from detection lists, and update score
+        :return Numbef of mice left
         """
         caught_mice = sprite.spritecollide(self.cat, self.mouse_list, False)
         for mouse in caught_mice:
@@ -50,6 +53,7 @@ class AnimalRenderer(Renderer):
             self.mouse_list.remove(mouse)
             self.dead_mouse_list.add(mouse)
             score_and_time.update_score()
+        return len(self.mouse_list)
             
     def render(self):
         """
