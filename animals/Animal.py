@@ -1,9 +1,9 @@
 import random
 
-import pygame
+from pygame import image, transform, sprite
 
 
-class Animal(pygame.sprite.Sprite):
+class Animal(sprite.Sprite):
     """
     An animal in the game
     """
@@ -18,8 +18,9 @@ class Animal(pygame.sprite.Sprite):
         self.speed = speed
         self.height = environment.get_height()
         self.width = environment.get_width()
+        self.wall_modifier = -1
         self.x_move, self.y_move, self. rotation = 0, 0, 0
-        self.root_image = pygame.image.load(self.image_name)
+        self.root_image = image.load(self.image_name)
         self.image = self.root_image
         self.rect = self.root_image.get_rect()
         self.rect.x = random.randrange(self.width)
@@ -32,7 +33,7 @@ class Animal(pygame.sprite.Sprite):
         """
         expected_rotation = self._expected_bearing()
         if expected_rotation != self.rotation:
-            self.image = pygame.transform.rotate(self.root_image, expected_rotation)
+            self.image = transform.rotate(self.root_image, expected_rotation)
             self.rect = self.image.get_rect(center=self.rect.center)
             self.rotation = expected_rotation
 
@@ -75,15 +76,15 @@ class Animal(pygame.sprite.Sprite):
         """
         if not self.is_dead:
             self.rect.move_ip(self.x_move, self.y_move)
-            if self.rect.left < 0:
-                self.rect.x = 0
-                self.x_move = -self.x_move
-            elif self.rect.right > self.width:
-                self.rect.right = self.width
-                self.x_move = -self.x_move
-            if self.rect.top < 0:
-                self.rect.y = 0
-                self.y_move = -self.y_move
-            elif self.rect.bottom > self.height:
-                self.rect.bottom = self.height
-                self.y_move = -self.y_move
+            if self.rect.left < 0 or self.rect.right > self.width:
+                self.x_move *= self.wall_modifier
+                if self.rect.left < 0:
+                    self.rect.x = 0
+                else:
+                    self.rect.right = self.width
+            if self.rect.top < 0 or self.rect.bottom > self.height:
+                self.y_move *= self.wall_modifier
+                if self.rect.top < 0:
+                    self.rect.y = 0
+                else:
+                    self.rect.bottom = self.height

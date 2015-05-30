@@ -1,6 +1,7 @@
 import pygame
+from pygame import image
 
-from animals import Animal
+from . import Animal
 
 
 class Cat(Animal.Animal):
@@ -12,8 +13,9 @@ class Cat(Animal.Animal):
         Creates the cat with the proper image
         """
         super().__init__(environment, speed)
+        self.wall_modifier = 0
         self.image_name = "media/Cat.png"
-        self.root_image = pygame.image.load(self.image_name)
+        self.root_image = image.load(self.image_name)
         self.image = self.root_image
 
     def process_movement(self, input_event):
