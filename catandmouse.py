@@ -43,16 +43,10 @@ class CatAndMouseGame:
                 if user_input.type == pygame.QUIT:
                     sys.exit()
                 elif user_input.type == pygame.KEYDOWN:
-                    if user_input.type == pygame.KEYDOWN:
-                        if user_input.key == pygame.K_UP:
-                            self.menu.move_up()
-                        elif user_input.key == pygame.K_DOWN:
-                            self.menu.move_down()
-                        elif user_input.key == pygame.K_RETURN:
-                            if self.menu.active_index == 0:
-                                started = True
-                            elif self.menu.active_index == 3:
-                                sys.exit()
+                    if self.menu.menu_shown is True:
+                        started = self.menu.handle_key_press(user_input)
+                    else:
+                        self.menu.handle_return(user_input)
             self.render_and_draw(render_list)
 
     def reset_game(self):

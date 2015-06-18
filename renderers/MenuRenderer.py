@@ -1,3 +1,7 @@
+import sys
+
+from pygame import K_UP, K_DOWN, K_RETURN
+
 from renderers.TextRenderer import TextRenderer
 
 
@@ -16,6 +20,7 @@ class MenuRenderer(TextRenderer):
         self.active_index = 0
         self.texts = option_texts
         self.menu_options = self.create_options(option_texts)
+        self.menu_shown = True
 
     def create_options(self, option_list):
         """
@@ -39,6 +44,29 @@ class MenuRenderer(TextRenderer):
                 option_rect.y += (self.font_size * (index-half))
             options[option_text] = {"text": option, 'rect': option_rect, 'order': index}
         return options
+
+    def handle_key_press(self, user_input):
+        """
+        Handle key presses to navigate the menu
+        """
+        if user_input.key == K_UP:
+            self.move_up()
+        elif user_input.key == K_DOWN:
+            self.move_down()
+        elif user_input.key == K_RETURN:
+            if self.active_index == 0:
+                return True
+            elif self.active_index == 1:
+                self.menu_shown = False
+            elif self.active_index == 3:
+                sys.exit()
+
+    def handle_return(self, user_input):
+        """
+        Handle returning from a sub-menu
+        """
+        if user_input.key == K_RETURN:
+            self.menu_shown = True
 
     def move_down(self):
         """
