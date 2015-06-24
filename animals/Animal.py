@@ -1,4 +1,5 @@
 import random
+from math import atan2, degrees
 
 from pygame import image, transform, sprite
 
@@ -20,7 +21,7 @@ class Animal(sprite.Sprite):
         self.width = environment.get_width()
         self.wall_modifier = -1
         self.x_move, self.y_move, self. rotation = 0, 0, 0
-        self.root_image = image.load(self.image_name)
+        self.root_image = transform.rotate(image.load(self.image_name), 180)
         self.image = self.root_image
         self.rect = self.root_image.get_rect()
         self.rect.x = random.randrange(self.width)
@@ -42,27 +43,10 @@ class Animal(sprite.Sprite):
         Find the bearing in degrees that an animal should face with 0 being west
         :return: the bearing of the animals
         """
-        if self.x_move > 0:
-            if self.y_move > 0:
-                return 135
-            elif self.y_move == 0:
-                return 180
-            else:
-                return 235
-        elif self.x_move == 0:
-            if self.y_move > 0:
-                return 90
-            elif self.y_move == 0:
-                return self.rotation
-            else:
-                return 270
-        elif self.x_move < 0:
-            if self.y_move > 0:
-                return 45
-            elif self.y_move == 0:
-                return 0
-            else:
-                return 315
+        if self.x_move != 0 or self.y_move != 0:
+            return -degrees(atan2(self.y_move, self.x_move))
+        else:
+            return self.rotation
 
     def update(self):
         """
