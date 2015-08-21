@@ -4,7 +4,7 @@ from pygame import image, transform
 from . import Animal
 
 
-class Cat(Animal.Animal):
+class Cat(Animal):
     """
     Cat that will chase mice
     """

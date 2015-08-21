@@ -1,6 +1,6 @@
 import time
 
-from renderers.TextRenderer import TextRenderer
+from . import TextRenderer
 
 
 class PlayTextRenderer(TextRenderer):

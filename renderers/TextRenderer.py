@@ -1,6 +1,6 @@
 from pygame.font import Font
 
-from renderers.Renderer import Renderer
+from . import Renderer
 
 
 class TextRenderer(Renderer):

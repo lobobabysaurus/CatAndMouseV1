@@ -3,9 +3,7 @@ import sys
 import pygame
 from pygame import display, time, event
 
-from renderers.AnimalRenderer import AnimalRenderer
-from renderers.PlayTextRenderer import PlayTextRenderer
-from renderers.MenuRenderer import MenuRenderer
+from renderers import AnimalRenderer, PlayTextRenderer, MenuRenderer
 
 
 class CatAndMouseGame:
@@ -18,6 +16,7 @@ class CatAndMouseGame:
         """
         pygame.init()
         self.mouse_number = 10
+        self.flee_zone = 75
         size = self.width, self.height = 600, 680
         self.background = display.set_mode(size)
         self.background_color = (75, 156, 212)
@@ -27,7 +26,7 @@ class CatAndMouseGame:
         menu_options = ["Start", "Instructions", "Options", "Quit", ]
         self.menu = MenuRenderer(self.background, menu_options)
         self.score_and_time = PlayTextRenderer(self.background, self.mouse_number)
-        self.animals = AnimalRenderer(self.background, self.mouse_number)
+        self.animals = AnimalRenderer(self.background, self.mouse_number, self.flee_zone)
 
     def present_menu(self, rerun=False):
         """
@@ -53,7 +52,7 @@ class CatAndMouseGame:
         """
         Reset the game play screen
         """
-        self.animals = AnimalRenderer(self.background, self.mouse_number)
+        self.animals = AnimalRenderer(self.background, self.mouse_number, self.flee_zone)
         self.score_and_time = PlayTextRenderer(self.background, self.mouse_number)
 
     def play_game(self):
@@ -71,6 +70,7 @@ class CatAndMouseGame:
                     self.animals.cat.process_movement(user_input)
             if self.animals.detect_deaths(self.score_and_time) == 0:
                 all_caught = True
+            self.animals.detect_close()
             self.render_and_draw(render_list)
 
     def render_and_draw(self, render_array):

@@ -2,7 +2,7 @@ import sys
 
 from pygame import K_UP, K_DOWN, K_RETURN
 
-from renderers.TextRenderer import TextRenderer
+from . import TextRenderer
 
 
 class MenuRenderer(TextRenderer):
