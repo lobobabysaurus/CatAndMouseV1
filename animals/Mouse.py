@@ -27,6 +27,10 @@ class Mouse(Animal):
         self.is_dead = True
 
     def flee(self, cat):
+        """
+        Have the mouse flee from the cat
+        :param cat user controlled cat
+        """
         if (cat.rect.x > self.rect.x and self.x_move > 0) or \
                 (cat.rect.x < self.rect.x and self.x_move < 0):
             self.x_move = -self.x_move

@@ -1,7 +1,6 @@
 import sys
 
 import pygame
-from pygame import display, Surface, time, event
 
 from renderers import AnimalRenderer, PlayTextRenderer, MenuRenderer
 
@@ -15,14 +14,15 @@ class CatAndMouseGame:
         Setup the environment and participants for a game of cat and mouse
         """
         pygame.init()
+        pygame.mixer.init()
         self.mouse_number = 10
         self.flee_zone = 75
         size = self.width, self.height = 600, 680
-        self.background = display.set_mode(size)
+        self.background = pygame.display.set_mode(size)
         self.tile = self.get_floor(size)
-        display.set_caption("Cat and Mouse")
+        pygame.display.set_caption("Cat and Mouse")
 
-        self.clock = time.Clock()
+        self.clock = pygame.time.Clock()
         menu_options = ["Start", "Instructions", "Options", "Quit", ]
         self.menu = MenuRenderer(self.background, menu_options)
         self.score_and_time = PlayTextRenderer(self.background, self.mouse_number)
@@ -35,7 +35,7 @@ class CatAndMouseGame:
         :param background_size: Size of the background
         :return: Surface object covered in flooring
         """
-        tile = Surface(background_size)
+        tile = pygame.Surface(background_size)
         tile_image = pygame.image.load('media/TileFloor.png')
         tile_size = tile_image.get_size()
         tile_rect = tile_image.get_rect()
@@ -48,7 +48,8 @@ class CatAndMouseGame:
 
     def present_menu(self, rerun=False):
         """
-        Show a menu to the user
+        Present the game selection menu to the user
+        :param rerun: Determine if it the first run or a rerun of the game
         """
         started = False
         render_list = [self.animals.render, self.menu.render]
@@ -56,7 +57,7 @@ class CatAndMouseGame:
             render_list.append(self.score_and_time.render)
         while not started:
             # Handle user input
-            for user_input in event.get():
+            for user_input in pygame.event.get():
                 if user_input.type == pygame.QUIT:
                     sys.exit()
                 elif user_input.type == pygame.KEYDOWN:
@@ -81,7 +82,7 @@ class CatAndMouseGame:
         render_list = [self.animals.render, self.score_and_time.render]
         while not all_caught:
             # Handle user input
-            for user_input in event.get():
+            for user_input in pygame.event.get():
                 if user_input.type == pygame.QUIT:
                     sys.exit()
                 elif user_input.type == pygame.KEYUP or user_input.type == pygame.KEYDOWN:
@@ -99,7 +100,7 @@ class CatAndMouseGame:
         self.background.blit(self.tile, self.tile.get_rect())
         for render in render_array:
             render()
-        display.flip()
+        pygame.display.flip()
         self.clock.tick(60)
 
 cmg = CatAndMouseGame()

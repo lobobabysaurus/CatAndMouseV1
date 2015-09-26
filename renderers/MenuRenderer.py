@@ -1,6 +1,6 @@
 import sys
 
-from pygame import K_UP, K_DOWN, K_RETURN
+from pygame import K_UP, K_DOWN, K_RETURN, mixer
 
 from . import TextRenderer
 
@@ -21,6 +21,7 @@ class MenuRenderer(TextRenderer):
         self.texts = option_texts
         self.menu_options = self.create_options(option_texts)
         self.menu_shown = True
+        self.meow = mixer.Sound('media/meow.ogg')
 
     def create_options(self, option_list):
         """
@@ -48,6 +49,7 @@ class MenuRenderer(TextRenderer):
     def handle_key_press(self, user_input):
         """
         Handle key presses to navigate the menu
+        :param user_input Keyboard event by the user
         """
         if user_input.key == K_UP:
             self.move_up()
@@ -55,6 +57,7 @@ class MenuRenderer(TextRenderer):
             self.move_down()
         elif user_input.key == K_RETURN:
             if self.active_index == 0:
+                self.meow.play()
                 return True
             elif self.active_index == 1:
                 self.menu_shown = False
@@ -64,6 +67,7 @@ class MenuRenderer(TextRenderer):
     def handle_return(self, user_input):
         """
         Handle returning from a sub-menu
+        :param user_input Keyboard event by the user
         """
         if user_input.key == K_RETURN:
             self.menu_shown = True

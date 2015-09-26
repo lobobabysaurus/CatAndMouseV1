@@ -57,6 +57,7 @@ class AnimalRenderer(Renderer):
     def detect_deaths(self, score_and_time):
         """
         Find out if any mice have been killed, let them die, remove them from detection lists, and update score
+        :param score_and_time Play Text Renderer for the score and time
         :return Number of mice left
         """
         caught_mice = sprite.spritecollide(self.cat, self.mouse_list, False)
