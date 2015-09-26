@@ -16,7 +16,7 @@ class MenuRenderer(TextRenderer):
         :param option_texts: List of all option texts
         """
         super().__init__(screen)
-        self.active_color = (214, 130, 50)
+        self.active_color = (0, 158, 138)
         self.active_index = 0
         self.texts = option_texts
         self.menu_options = self.create_options(option_texts)

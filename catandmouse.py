@@ -1,14 +1,14 @@
 import sys
 
 import pygame
-from pygame import display, time, event
+from pygame import display, Surface, time, event
 
 from renderers import AnimalRenderer, PlayTextRenderer, MenuRenderer
 
 
 class CatAndMouseGame:
     """
-    A game where the great cat Lobo kills the evil mouse
+    A game where the great cat Lobo kills the evil mice
     """
     def __init__(self):
         """
@@ -19,7 +19,7 @@ class CatAndMouseGame:
         self.flee_zone = 75
         size = self.width, self.height = 600, 680
         self.background = display.set_mode(size)
-        self.background_color = (75, 156, 212)
+        self.tile = self.get_floor(size)
         display.set_caption("Cat and Mouse")
 
         self.clock = time.Clock()
@@ -27,6 +27,24 @@ class CatAndMouseGame:
         self.menu = MenuRenderer(self.background, menu_options)
         self.score_and_time = PlayTextRenderer(self.background, self.mouse_number)
         self.animals = AnimalRenderer(self.background, self.mouse_number, self.flee_zone)
+
+    @staticmethod
+    def get_floor(background_size):
+        """
+        Given the size of the background, draw a floor that is covered by tiles to match the floor
+        :param background_size: Size of the background
+        :return: Surface object covered in flooring
+        """
+        tile = Surface(background_size)
+        tile_image = pygame.image.load('media/TileFloor.png')
+        tile_size = tile_image.get_size()
+        tile_rect = tile_image.get_rect()
+        for y in range(0, background_size[1], tile_size[1]):
+            for x in range(0, background_size[0], tile_size[0]):
+                tile_rect.x = x
+                tile_rect.y = y
+                tile.blit(tile_image, tile_rect)
+        return tile
 
     def present_menu(self, rerun=False):
         """
@@ -78,7 +96,7 @@ class CatAndMouseGame:
         Clear the screen, render all relevant components, and then redraw the screen
         :param render_array: Array of render methods to be called within the method
         """
-        self.background.fill(self.background_color)
+        self.background.blit(self.tile, self.tile.get_rect())
         for render in render_array:
             render()
         display.flip()
