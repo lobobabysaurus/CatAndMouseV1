@@ -8,15 +8,16 @@ class Cat(Animal):
     """
     Cat that will chase mice
     """
-    def __init__(self, environment, speed):
+    def __init__(self, environment, _speed):
         """
         Creates the cat with the proper image
         """
-        super().__init__(environment, speed)
-        self.wall_modifier = 0
-        self.image_name = "media/Cat.png"
-        self.root_image = transform.rotate(image.load(self.image_name), 180)
-        self.image = self.root_image
+        super().__init__(environment, _speed)
+        
+        self._wall_modifier = 0
+        image_name = "media/Cat.png"
+        self._root_image = transform.rotate(image.load(image_name), 180)
+        self.image = self._root_image
 
     def process_movement(self, input_event):
         """
@@ -24,18 +25,34 @@ class Cat(Animal):
         :param input_event event Keyboard input provided by the user
         """
         if input_event.type == pygame.KEYUP:
-            if input_event.key == pygame.K_UP or input_event.key == pygame.K_DOWN:
-                self.y_move = 0
-            elif input_event.key == pygame.K_LEFT or input_event.key == pygame.K_RIGHT:
-                self.x_move = 0
-            self._adjust_bearing()
+            self._handle_key_up(input_event)
         elif input_event.type == pygame.KEYDOWN:
-            if input_event.key == pygame.K_UP:
-                self.y_move = -self.speed
-            elif input_event.key == pygame.K_DOWN:
-                self.y_move = self.speed
-            elif input_event.key == pygame.K_LEFT:
-                self.x_move = -self.speed
-            elif input_event.key == pygame.K_RIGHT:
-                self.x_move = self.speed
-            self._adjust_bearing()
+            self._handle_key_down(input_event)
+
+    def _handle_key_down(self, input_event):
+        """
+        Handle what happense when the user presses down a key
+        :param input_event Key press
+        """
+        if input_event.key == pygame.K_UP:
+            self._y_move = -self._speed
+        elif input_event.key == pygame.K_DOWN:
+            self._y_move = self._speed
+        elif input_event.key == pygame.K_LEFT:
+            self._x_move = -self._speed
+        elif input_event.key == pygame.K_RIGHT:
+            self._x_move = self._speed
+        self._adjust_bearing()
+
+    def _handle_key_up(self, input_event):
+        """
+        Handle what happense when the user releases a key
+        :param input_event Key press
+        """
+        if input_event.key == pygame.K_UP or \
+                input_event.key == pygame.K_DOWN:
+            self._y_move = 0
+        elif input_event.key == pygame.K_LEFT or \
+                input_event.key == pygame.K_RIGHT:
+            self._x_move = 0
+        self._adjust_bearing()

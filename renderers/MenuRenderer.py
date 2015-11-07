@@ -2,7 +2,7 @@ import sys
 
 from pygame import K_UP, K_DOWN, K_RETURN, mixer
 
-from . import TextRenderer
+from renderers import TextRenderer
 
 
 class MenuRenderer(TextRenderer):
@@ -16,34 +16,36 @@ class MenuRenderer(TextRenderer):
         :param option_texts: List of all option texts
         """
         super().__init__(screen)
-        self.active_color = (0, 158, 138)
-        self.active_index = 0
-        self.texts = option_texts
-        self.menu_options = self.create_options(option_texts)
-        self.menu_shown = True
-        self.meow = mixer.Sound('media/meow.ogg')
 
-    def create_options(self, option_list):
+        self.menu_shown = True
+        self._active_color = (0, 158, 138)
+        self._active_index = 0
+        self._menu_options = self._create_options(option_texts)
+        self._meow = mixer.Sound('media/meow.ogg')
+        self._texts = option_texts
+
+    def _create_options(self, option_list):
         """
         Create a menu option
         :param option_list A list of text for options that should be created
-        :return A dictionary mapping every option surface to its relevant rectangle
+        :return Dictionary mapping option surfaces to relevant rectangles
         """
         half = len(option_list)/2
         options = {}
         for index, option in enumerate(option_list):
-            if self.active_index == index:
-                option_text = self.font.render(option, 1, self.active_color)
+            if self._active_index == index:
+                option_text = self._font.render(option, 1, self._active_color)
             else:
-                option_text = self.font.render(option, 1, self.text_color)
+                option_text = self._font.render(option, 1, self._text_color)
             option_rect = option_text.get_rect()
-            option_rect.x = self.width/2 - option_rect.width/2
-            option_rect.y = self.height/2 - option_rect.height/2
+            option_rect.x = self._width/2 - option_rect.width/2
+            option_rect.y = self._height/2 - option_rect.height/2
             if index < half:
-                option_rect.y -= (self.font_size * (half-index))
+                option_rect.y -= (self._font_size * (half-index))
             else:
-                option_rect.y += (self.font_size * (index-half))
-            options[option_text] = {"text": option, 'rect': option_rect, 'order': index}
+                option_rect.y += (self._font_size * (index-half))
+            options[option_text] = {
+                "text": option, 'rect': option_rect, 'order': index}
         return options
 
     def handle_key_press(self, user_input):
@@ -52,16 +54,16 @@ class MenuRenderer(TextRenderer):
         :param user_input Keyboard event by the user
         """
         if user_input.key == K_UP:
-            self.move_up()
+            self._move_up()
         elif user_input.key == K_DOWN:
-            self.move_down()
+            self._move_down()
         elif user_input.key == K_RETURN:
-            if self.active_index == 0:
-                self.meow.play()
+            if self._active_index == 0:
+                self._meow.play()
                 return True
-            elif self.active_index == 1:
+            elif self._active_index == 1:
                 self.menu_shown = False
-            elif self.active_index == 3:
+            elif self._active_index == 3:
                 sys.exit()
 
     def handle_return(self, user_input):
@@ -72,25 +74,25 @@ class MenuRenderer(TextRenderer):
         if user_input.key == K_RETURN:
             self.menu_shown = True
 
-    def move_down(self):
-        """
-        Rerender menu list with the active item now being below the previously active item
-        """
-        if self.active_index != len(self.texts)-1:
-            self.active_index += 1
-            self.menu_options = self.create_options(self.texts)
-
-    def move_up(self):
-        """
-        Rerender menu list with the active item now being above the previously active item
-        """
-        if self.active_index != 0:
-            self.active_index -= 1
-            self.menu_options = self.create_options(self.texts)
-
     def render(self):
         """
         Render menu options
         """
-        for option in self.menu_options:
-            self.background.blit(option, self.menu_options[option]['rect'])
+        for option in self._menu_options:
+            self._background.blit(option, self._menu_options[option]['rect'])
+
+    def _move_up(self):
+        """
+        Rerender menu with the active item now above the previously active item
+        """
+        if self._active_index != 0:
+            self._active_index -= 1
+            self._menu_options = self._create_options(self._texts)
+
+    def _move_down(self):
+        """
+        Rerender menu the active item now below the previously active item
+        """
+        if self._active_index != len(self._texts)-1:
+            self._active_index += 1
+            self._menu_options = self._create_options(self._texts)
