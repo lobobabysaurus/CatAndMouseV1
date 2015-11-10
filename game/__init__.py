@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from renderers import AnimalRenderer, PlayTextRenderer, MenuRenderer
+from game.renderers import AnimalRenderer, PlayTextRenderer, MenuRenderer
 
 
 class CatAndMouseGame:

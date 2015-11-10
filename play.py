@@ -1,4 +1,4 @@
-from catandmouse import CatAndMouseGame
+from game import CatAndMouseGame
 
 cmg = CatAndMouseGame()
 first_run = True

@@ -3,8 +3,8 @@ import random
 
 from pygame import sprite
 
-from animals import Cat, Mouse
-from renderers import Renderer
+from game.animals import Cat, Mouse
+from game.renderers import Renderer
 
 
 class AnimalRenderer(Renderer):
