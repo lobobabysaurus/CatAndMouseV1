@@ -2,7 +2,7 @@ import random
 
 import pygame
 
-from . import Animal
+from game.animals import Animal
 
 
 class Mouse(Animal):

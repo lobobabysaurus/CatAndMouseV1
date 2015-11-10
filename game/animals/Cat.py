@@ -1,7 +1,7 @@
 import pygame
 from pygame import image, transform
 
-from . import Animal
+from game.animals import Animal
 
 
 class Cat(Animal):
@@ -13,7 +13,7 @@ class Cat(Animal):
         Creates the cat with the proper image
         """
         super().__init__(environment, _speed)
-        
+
         self._wall_modifier = 0
         image_name = "media/Cat.png"
         self._root_image = transform.rotate(image.load(image_name), 180)
